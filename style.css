@@ -29,19 +29,24 @@ main h2{
     justify-content: center;
 }
 .pokemon-box{
+    display: flex;
+    flex-flow: column wrap;
     border-radius: 5px;
-    width: 30%;
+    width: 48%;
     margin:0.2%;
     background-color: rgb(219, 219, 219);
 }
 .pokemon-box img{
     width:100%;
+    max-width: 200px;
+    align-self: center;
 }
 .pokemon-box p{
     color:black;
     font-size: 21px;
     text-align: center;
     padding: 10px 0;
+    margin: 5px;
 
 }
 
