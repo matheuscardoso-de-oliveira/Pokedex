@@ -24,7 +24,7 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+1000,{method:'GET'})
            
             if(pokemons.length == quantidade){
                 //console.log(pokemons)
-                var pokemonBoxes = document.querySelector('.pokemon-boxes')
+                
                 pokemonBoxes.innerHTML= ""
                 pokemons.map(function(val){
                    
