@@ -84,6 +84,7 @@ main h2{
   font-size: 18px;
   /* Transição para suavizar a mudança de cor ao passar o mouse */
   transition: background-color 0.3s;
+  opacity:0.7;
 }
 
 #back-to-top:hover {
