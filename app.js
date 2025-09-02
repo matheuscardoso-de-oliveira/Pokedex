@@ -60,7 +60,8 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+1000,{method:'GET'})
 function pesquisar(){
     var searchBox = document.getElementById('sPoke').value
 
-    var pokesQ = 1003
+    const pokesQ = 1003
+    let found = 0
     if(!searchBox){
         pokemonBoxes.innerHTML=     ''
         pokemonBoxes.innerHTML+= 'Nada foi digitado'
@@ -84,7 +85,7 @@ function pesquisar(){
                 if(pokemons.length == pokesQ){
 
                     //console.log(pokemons)
-                    var pokemonBoxes = document.querySelector('.pokemon-boxes')
+                    
                     pokemonBoxes.innerHTML= ""
                     pokemons.map(function(val){
                      
