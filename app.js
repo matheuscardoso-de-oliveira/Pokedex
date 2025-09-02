@@ -123,4 +123,22 @@ function pesquisar(){
     function reset(){
         catchAll(151)
     }
-    
+    // Pega o elemento do botão "Voltar ao topo" pelo seu ID
+let mybutton = document.getElementById("back-to-top");
+
+// Quando o usuário rolar a página para baixo 20px, mostre o botão
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+// Quando o usuário clicar no botão, volte para o topo do documento
+function scrollToTop() {
+  document.body.scrollTop = 0; // Para navegadores Safari
+  document.documentElement.scrollTop = 0; // Para Chrome, Firefox, IE e Opera
+}
