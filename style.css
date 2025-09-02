@@ -79,12 +79,12 @@ main h2{
   background-color: #555;
   color: white;
   cursor: pointer;
-  padding: 15px;
+  padding: 5px;
   border-radius: 10px;
   font-size: 18px;
   /* Transição para suavizar a mudança de cor ao passar o mouse */
   transition: background-color 0.3s;
-  opacity:0.7;
+  opacity:0.5;
 }
 
 #back-to-top:hover {
