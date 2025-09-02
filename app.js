@@ -16,7 +16,7 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+quantidade,{method:'GET'})
         fetch(val.url,{method:'GET'})
         .then(response => response.json())
         .then((pokemonSingle)=>{
-            console.log(pokemonSingle)
+           // console.log(pokemonSingle)
             pokemons.push({nome:pokemonSingle.name, imagem: pokemonSingle.sprites.front_default, abilidade: pokemonSingle.abilities, dex: pokemonSingle.game_indices[3].game_index, exp: pokemonSingle.base_experience})
            
             if(pokemons.length == quantidade){
@@ -24,22 +24,23 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+quantidade,{method:'GET'})
                 var pokemonBoxes = document.querySelector('.pokemon-boxes')
                 pokemonBoxes.innerHTML= ""
                 pokemons.map(function(val){
-                   pokemonBoxes.innerHTML+= 
-                   `<div class="pokemon-box">
-                    <img src="${val.imagem}" alt="${val.nome}">
-                    <p>Nome: ${val.nome}</p>
-                    <p>NationalDex: ${val.dex}</p>
                    
-
-                    </div>`
+                   
                     texto = `<div class="pokemon-box">
                     <img src="${val.imagem}" alt="${val.nome}">
+                    <div class="items">
                     <p>Nome: ${val.nome}</p>
                     <p>NationalDex: ${val.dex}</p>
-                   
+                    <p>Habilidades: 
+                    `
+                   val.abilidade.map((abi)=>{
+                   texto += `${abi.ability.name} `
+                   })
 
+                    texto+= ` </div> 
                     </div>`
-                    
+                    pokemonBoxes.innerHTML+= texto
+                    texto = ""
                    /* <div class="pokemon-box">
                     <img src="" alt="">
                     <p></p>
