@@ -9,6 +9,7 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+quantidade,{method:'GET'})
 .then((allpokemon) => {
 
     var pokemons = [];
+    var texto = " ";
 
     allpokemon.results.map((val)=>{
         
@@ -25,6 +26,13 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+quantidade,{method:'GET'})
                 pokemons.map(function(val){
                    pokemonBoxes.innerHTML+= 
                    `<div class="pokemon-box">
+                    <img src="${val.imagem}" alt="${val.nome}">
+                    <p>Nome: ${val.nome}</p>
+                    <p>NationalDex: ${val.dex}</p>
+                   
+
+                    </div>`
+                    texto = `<div class="pokemon-box">
                     <img src="${val.imagem}" alt="${val.nome}">
                     <p>Nome: ${val.nome}</p>
                     <p>NationalDex: ${val.dex}</p>
