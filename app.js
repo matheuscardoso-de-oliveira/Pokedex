@@ -4,7 +4,7 @@ quantidade.addEventListener('change', ()=>{
 })
 catchAll(151)
 function catchAll(quantidade){
-fetch('https://pokeapi.co/api/v2/pokemon?limit='+quantidade,{method:'GET'})
+fetch('https://pokeapi.co/api/v2/pokemon?limit='+1000,{method:'GET'})
 .then(response => response.json())
 .then((allpokemon) => {
 
@@ -13,11 +13,11 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+quantidade,{method:'GET'})
 
     allpokemon.results.map((val)=>{
         
-        fetch(val.url,{method:'GET'})
+        fetch(val.url)
         .then(response => response.json())
         .then((pokemonSingle)=>{
            // console.log(pokemonSingle)
-            pokemons.push({nome:pokemonSingle.name, imagem: pokemonSingle.sprites.front_default, abilidade: pokemonSingle.abilities, dex: pokemonSingle.game_indices[3].game_index, exp: pokemonSingle.base_experience})
+            pokemons.push({nome:pokemonSingle.name, imagem: pokemonSingle.sprites.front_default, abilidade: pokemonSingle.abilities,  exp: pokemonSingle.base_experience})
            
             if(pokemons.length == quantidade){
                 //console.log(pokemons)
@@ -30,7 +30,6 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+quantidade,{method:'GET'})
                     <img src="${val.imagem}" alt="${val.nome}">
                     <div class="items">
                     <p>Nome: ${val.nome}</p>
-                    <p>NationalDex: ${val.dex}</p>
                     <p>Habilidades: 
                     `
                    val.abilidade.map((abi)=>{
