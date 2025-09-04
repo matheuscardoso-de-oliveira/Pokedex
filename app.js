@@ -19,7 +19,7 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+1000,{method:'GET'})
         fetch(val.url)
         .then(response => response.json())
         .then((pokemonSingle)=>{
-           // console.log(pokemonSingle)
+           console.log(pokemonSingle)
             pokemons.push({nome:pokemonSingle.name, imagem: pokemonSingle.sprites.front_default, abilidade: pokemonSingle.abilities,  exp: pokemonSingle.base_experience})
            
             if(pokemons.length == quantidade){
@@ -39,7 +39,7 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+1000,{method:'GET'})
                    texto += `${abi.ability.name} `
                    })
 
-                    texto+= `</p> 
+                    texto+= `</p>
                     </div> 
                     </div>`
                     pokemonBoxes.innerHTML+= texto

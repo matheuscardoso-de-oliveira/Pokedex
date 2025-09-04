@@ -30,14 +30,15 @@ main h2{
 }
 .pokemon-box{
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: row nowrap;
     border-radius: 5px;
     width: 48%;
     margin:0.2%;
+    padding: 10px;
     background-color: rgb(219, 219, 219);
 }
 .pokemon-box img{
-    width:100%;
+    width:80%;
     max-width: 200px;
     align-self: center;
 }
