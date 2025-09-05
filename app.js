@@ -1,140 +1,101 @@
-var quantidade = document.getElementById('quantidade')
-var texto = " ";
-var pokemonBoxes = document.querySelector('.pokemon-boxes')
+// Global variables
+const pokemonBoxes = document.querySelector('.pokemon-boxes');
+const quantidadeInput = document.getElementById('quantidade');
+const searchInput = document.getElementById('sPoke');
+let pokemons = [];
 
-quantidade.addEventListener('change', ()=>{
-    catchAll(quantidade.value)
-})
-catchAll(151)
-function catchAll(quantidade){
-fetch('https://pokeapi.co/api/v2/pokemon?limit='+1000,{method:'GET'})
-.then(response => response.json())
-.then((allpokemon) => {
-
-    var pokemons = [];
-    var texto = " ";
-
-    allpokemon.results.map((val)=>{
-        
-        fetch(val.url)
-        .then(response => response.json())
-        .then((pokemonSingle)=>{
-           console.log(pokemonSingle)
-            pokemons.push({nome:pokemonSingle.name, imagem: pokemonSingle.sprites.front_default, abilidade: pokemonSingle.abilities,  exp: pokemonSingle.base_experience, types: pokemonSingle.types})
-           
-            if(pokemons.length == quantidade){
-                //console.log(pokemons)
-                
-                pokemonBoxes.innerHTML= ""
-                pokemons.map(function(val){
-                   
-                   
-                    texto = `<div class="pokemon-box">
-                    <img src="${val.imagem}" alt="${val.nome}">
-                    <div class="items">
-                    <p>Name: ${val.nome}</p>
-                    <p>Types:`
-                    val.types.map((types)=>{
-                    texto+= `${types.type.name} `
-                    })
-                    texto+= `</p>
-                    <p>Abilities: 
-                    `
-                   val.abilidade.map((abi)=>{
-                   texto += `${abi.ability.name} `
-                   })
-
-                    texto+= `</p> 
-                    </div> 
-                    </div>`
-                    pokemonBoxes.innerHTML+= texto
-                    texto = ""
-                   /* <div class="pokemon-box">
-                    <img src="" alt="">
-                    <p></p>
-                    </div>*/
-                })
-            }
-        })
-    })
-  
-}
-)
+// Event listeners
+if (quantidadeInput) {
+    quantidadeInput.addEventListener('change', () => {
+        const count = parseInt(quantidadeInput.value, 10);
+        if (!isNaN(count)) {
+            renderPokemons(pokemons.slice(0, count));
+        }
+    });
 }
 
-function pesquisar(){
-    var searchBox = document.getElementById('sPoke').value
+if (searchInput) {
+    // Using 'input' event for real-time search
+    searchInput.addEventListener('input', () => {
+        searchPokemons(searchInput.value);
+    });
+}
 
-    const pokesQ = 1003
-    if(!searchBox){
-        pokemonBoxes.innerHTML=     ''
-        pokemonBoxes.innerHTML+= 'Empty request'
+// Initial data fetch
+window.addEventListener('load', () => {
+    fetchAllPokemons();
+});
+
+// Resets the view to the initial state
+function reset() {
+    renderPokemons(pokemons.slice(0, 151));
+}
+
+// Fetches all Pokémon data from the API
+async function fetchAllPokemons() {
+    try {
+        pokemonBoxes.innerHTML = 'Loading Pokémon...';
+        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1000');
+        const allpokemon = await response.json();
+
+        const promises = allpokemon.results.map(async (pokemon) => {
+            const res = await fetch(pokemon.url);
+            return res.json();
+        });
+
+        const detailedPokemons = await Promise.all(promises);
+        pokemons = detailedPokemons.map(p => ({
+            nome: p.name,
+            imagem: p.sprites.front_default,
+            habilidades: p.abilities,
+            exp: p.base_experience,
+            types: p.types
+        }));
+
+        renderPokemons(pokemons.slice(0, 151)); // Render initial 151
+    } catch (error) {
+        console.error('Error fetching Pokémon data:', error);
+        pokemonBoxes.innerHTML = 'Failed to load Pokémon. Please try again later.';
+    }
+}
+
+// Renders the provided list of Pokémon to the DOM
+function renderPokemons(pokemonList) {
+    if (pokemonList.length === 0) {
+        pokemonBoxes.innerHTML = '<p>No Pokémon found.</p>';
         return;
-       }
-    fetch('https://pokeapi.co/api/v2/pokemon?limit='+pokesQ,{method:'GET'})
-    .then(response => response.json())
-    .then((allpokemon) => {
-    
-        var pokemons = [];
-        var texto = " ";
-    
-        allpokemon.results.map((val)=>{
-            
-            fetch(val.url,{method:'GET'})
-            .then(response => response.json())
-            .then((pokemonSingle)=>{
-               // console.log(pokemonSingle)
-                pokemons.push({nome:pokemonSingle.name, imagem: pokemonSingle.sprites.front_default, abilidade: pokemonSingle.abilities,  exp: pokemonSingle.base_experience, types: pokemonSingle.types})
-               
-                if(pokemons.length == pokesQ){
+    }
 
-                    //console.log(pokemons)
-                    
-                    pokemonBoxes.innerHTML= ""
-                    pokemons.map(function(val){
-                        console.log(val)
-                        if(val.nome.includes(searchBox.toLowerCase())){
-                        texto = `<div class="pokemon-box">
-                        <img src="${val.imagem}" alt="${val.nome}">
-                        <div class="items">
-                        <p>Name: ${val.nome}</p>
-                        <p>Types: `
-                        val.types.map((types)=>{
-                        texto+= `${types.type.name} `
-                        })
-                        texto+= `</p>
-                        <p>Abilities: 
-                        `
-                       val.abilidade.map((abi)=>{
-                       texto += `${abi.ability.name} `
-                       })
+    pokemonBoxes.innerHTML = pokemonList.map(pokemon => `
+        <div class="pokemon-box">
+            <img src="${pokemon.imagem}" alt="${pokemon.nome}">
+            <div class="items">
+                <p>Name: ${pokemon.nome}</p>
+                <p>Types: ${pokemon.types.map(t => t.type.name).join(' ')}</p>
+                <p>Abilities: ${pokemon.habilidades.map(a => a.ability.name).join(' ')}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Filters and renders Pokémon based on search query
+function searchPokemons(query) {
+    const searchTerm = query.toLowerCase().trim();
+    if (!searchTerm) {
+        renderPokemons(pokemons.slice(0, 151));
+        return;
+    }
+
+    const filteredPokemons = pokemons.filter(pokemon =>
+        pokemon.nome.includes(searchTerm)
+    );
+
+    renderPokemons(filteredPokemons);
+}
     
-                        texto+= `</p> 
-                        </div> 
-                        </div>`
-                        pokemonBoxes.innerHTML+= texto
-                        texto = ""
-                       /* <div class="pokemon-box">
-                        <img src="" alt="">
-                        <p></p>
-                        </div>*/
-                        }
-                    })
-                
-                }
-            })
-        })
-      
-    }
-    )
-    }
-    function reset(){
-        catchAll(151)
-    }
-    // Pega o elemento do botão "Voltar ao topo" pelo seu ID
 let mybutton = document.getElementById("back-to-top");
 
-// Quando o usuário rolar a página para baixo 20px, mostre o botão
+
 window.onscroll = function() {scrollFunction()};
 
 function scrollFunction() {
@@ -145,8 +106,8 @@ function scrollFunction() {
   }
 }
 
-// Quando o usuário clicar no botão, volte para o topo do documento
+
 function scrollToTop() {
-  document.body.scrollTop = 0; // Para navegadores Safari
-  document.documentElement.scrollTop = 0; // Para Chrome, Firefox, IE e Opera
+  document.body.scrollTop = 0; 
+  document.documentElement.scrollTop = 0; 
 }
