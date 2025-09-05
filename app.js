@@ -20,7 +20,7 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+1000,{method:'GET'})
         .then(response => response.json())
         .then((pokemonSingle)=>{
            console.log(pokemonSingle)
-            pokemons.push({nome:pokemonSingle.name, imagem: pokemonSingle.sprites.front_default, abilidade: pokemonSingle.abilities,  exp: pokemonSingle.base_experience})
+            pokemons.push({nome:pokemonSingle.name, imagem: pokemonSingle.sprites.front_default, abilidade: pokemonSingle.abilities,  exp: pokemonSingle.base_experience, types: pokemonSingle.types})
            
             if(pokemons.length == quantidade){
                 //console.log(pokemons)
@@ -32,14 +32,19 @@ fetch('https://pokeapi.co/api/v2/pokemon?limit='+1000,{method:'GET'})
                     texto = `<div class="pokemon-box">
                     <img src="${val.imagem}" alt="${val.nome}">
                     <div class="items">
-                    <p>Nome: ${val.nome}</p>
-                    <p>Habilidades: 
+                    <p>Name: ${val.nome}</p>
+                    <p>Types:`
+                    val.types.map((types)=>{
+                    texto+= `${types.type.name} `
+                    })
+                    texto+= `</p>
+                    <p>Abilities: 
                     `
                    val.abilidade.map((abi)=>{
                    texto += `${abi.ability.name} `
                    })
 
-                    texto+= `</p>
+                    texto+= `</p> 
                     </div> 
                     </div>`
                     pokemonBoxes.innerHTML+= texto
@@ -61,10 +66,9 @@ function pesquisar(){
     var searchBox = document.getElementById('sPoke').value
 
     const pokesQ = 1003
-    let found = 0
     if(!searchBox){
         pokemonBoxes.innerHTML=     ''
-        pokemonBoxes.innerHTML+= 'Nada foi digitado'
+        pokemonBoxes.innerHTML+= 'Empty request'
         return;
        }
     fetch('https://pokeapi.co/api/v2/pokemon?limit='+pokesQ,{method:'GET'})
@@ -80,7 +84,7 @@ function pesquisar(){
             .then(response => response.json())
             .then((pokemonSingle)=>{
                // console.log(pokemonSingle)
-                pokemons.push({nome:pokemonSingle.name, imagem: pokemonSingle.sprites.front_default, abilidade: pokemonSingle.abilities,  exp: pokemonSingle.base_experience})
+                pokemons.push({nome:pokemonSingle.name, imagem: pokemonSingle.sprites.front_default, abilidade: pokemonSingle.abilities,  exp: pokemonSingle.base_experience, types: pokemonSingle.types})
                
                 if(pokemons.length == pokesQ){
 
@@ -88,14 +92,18 @@ function pesquisar(){
                     
                     pokemonBoxes.innerHTML= ""
                     pokemons.map(function(val){
-                     
+                        console.log(val)
                         if(val.nome.includes(searchBox.toLowerCase())){
                         texto = `<div class="pokemon-box">
                         <img src="${val.imagem}" alt="${val.nome}">
                         <div class="items">
-                        <p>Nome: ${val.nome}</p>
-                        
-                        <p>Habilidades: 
+                        <p>Name: ${val.nome}</p>
+                        <p>Types: `
+                        val.types.map((types)=>{
+                        texto+= `${types.type.name} `
+                        })
+                        texto+= `</p>
+                        <p>Abilities: 
                         `
                        val.abilidade.map((abi)=>{
                        texto += `${abi.ability.name} `

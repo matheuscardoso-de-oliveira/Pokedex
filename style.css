@@ -38,7 +38,7 @@ main h2{
     background-color: rgb(219, 219, 219);
 }
 .pokemon-box img{
-    width:80%;
+    width:50%;
     max-width: 200px;
     align-self: center;
 }
@@ -61,6 +61,8 @@ main h2{
 
 @media screen and (max-width:768px){
     .pokemon-box{
+        display: flex;
+        flex-flow: column nowrap;
         width: 100%;
         text-align: center;
     }
